@@ -20,7 +20,7 @@ function PageAccueilConnexion() {
                     className="boutonConnexionEleve"
                     onClick={ClickBouton}
                     style={{ 
-                        color: 'white',
+                        color: '#AA1F40',
                         width: '180px',
                         height: '180px',
                      }}
@@ -34,7 +34,7 @@ function PageAccueilConnexion() {
                     className="boutonConnexionProf"
                     onClick={ClickBouton}
                     style={{ 
-                        color: 'white',
+                        color: '#AA1F40',
                         width: '180px',
                         height: '180px',
                      }}
