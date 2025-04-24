@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import iconeEleve from '../../../Image/icone élève 100px.png';
 import iconeProf from '../../../Image/icone prof 100px.png';
+import Bandeau from './Bandeau';
 
-function PageAccueilConnexion(){
+function PageAccueilConnexion() {
     function BoutonChoixConnexion() {
         const [count, setCount] = useState(0);
         // Fonction de gestion du clic
-        const ClickBouton = () => {};
-    
+        const ClickBouton = () => { };
+
         return (
             <div style={{
                 display: 'flex',
@@ -46,8 +47,8 @@ function PageAccueilConnexion(){
     }
     return (
         <div>
-            <Bandeau/>
-            <BoutonChoixConnexion/>
+            <Bandeau />
+            <BoutonChoixConnexion />
         </div>
     );
 }
