@@ -27,7 +27,10 @@ function PageAccueilConnexion(){
         );
     }
     return (
-        <BoutonChoixConnexion/>
+        <div>
+            <Bandeau/>
+            <BoutonChoixConnexion/>
+        </div>
     );
 }
 
