@@ -7,12 +7,23 @@ function PageAccueilConnexion(){
         const ClickBouton = () => {};
     
         return (
-            <button
-                className="boutonConnexionEleve"
-                onClick={ClickBouton}
-            >
-                Connexion Élève
-            </button>
+            <div>
+                <button
+                    className="boutonConnexionEleve"
+                    onClick={ClickBouton}
+                    style={{ color: 'white' }}
+                >
+                    Connexion Élève
+                </button>
+
+                <button
+                    className="boutonConnexionProf"
+                    onClick={ClickBouton}
+                    style={{ color: 'white' }}
+                >
+                    Connexion Professeur
+                </button>
+            </div>
         );
     }
     return (
