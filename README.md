@@ -64,6 +64,7 @@ Nous avons également utilisé **XAMPP** en ce qui concerne la gestion des bases
 
 3. Lancer l'application web
    ```
+   npm install
    npm run dev
    ```
 
