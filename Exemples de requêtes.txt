@@ -1,0 +1,13 @@
+// Requête pour un élève
+SELECT nom_matiere, nom_controle, note, commentaire
+FROM notes
+JOIN eleves ON notes.eleve_id=eleves.id
+WHERE nom_utilisateur_eleve="bpawelczyk" AND mdp_eleve="mdp789"
+ORDER BY nom_matiere;
+
+// Requête pour un professeur
+SELECT nom_eleve, prenom_eleve, nom_controle, note, commentaire
+FROM notes
+JOIN eleves ON notes.eleve_id=eleves.id JOIN professeurs ON notes.nom_matiere=professeurs.nom_matiere
+WHERE nom_utilisateur_prof="jsaracco" AND mdp_prof="mdp123"
+ORDER BY nom_eleve;
