@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Bandeau from './Bandeau.jsx';
 import Poulpe from './Poulpe.jsx';
+import PageFormulaireEleve from './PageFormulaireEleve.jsx';
 
 function PageAccueilConnexion() {
     const [connexionEleve, setConnexionEleve] = useState(false);
@@ -36,33 +37,13 @@ function PageAccueilConnexion() {
     else if (connexionEleve==true)
     {
         return (
-            <>
-            <Bandeau/>
-            <Poulpe/>
-            <form>
-                <label htmlFor="username">Identifiant</label>
-                <input type="text" id="identifiant" name="identifiant" />
-                <label htmlFor="password">Mot de passe</label>
-                <input type="password" id="mdp" name="mdp" />
-                <button type="submit">Se connecter</button>
-            </form>
-            </>
+            <PageFormulaireEleve/>
         )
     }
     else (connexionProf==true)
     {
         return (
-            <>
-            <Bandeau/>
-            <Poulpe/>
-            <form>
-                <label htmlFor="username">Identifiant</label>
-                <input type="text" id="identifiant" name="identifiant" />
-                <label htmlFor="password">Mot de passe</label>
-                <input type="password" id="mdp" name="mdp" />
-                <button type="submit">Se connecter</button>
-            </form>
-            </>
+            <PageFormulaireProf/>
         )
     }
 }
