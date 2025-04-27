@@ -2,38 +2,57 @@ import { useState, useEffect } from 'react';
 import Bandeau from './Bandeau.jsx';
 import Poulpe from './Poulpe.jsx';
 
-function PageFormulaireEleve() {
+function PageFormulaireProf() {
+    const [data, setData] = useState([]);
     const [clicConnexion, setClicConnexion] = useState(false);
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
-    
-    const afficherNotesEleve = () => {
-        setClicConnexion(true);
-    }
 
-    let json = {name:"",sprites:{front_default:null}};
-    const [data, setData] = useState(json);
-
-    const cliquer = () => {
+    const API = () => {
         fetch(`http://localhost/API/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
-            .then(datas => {setData(datas)})
-        if (data==[])
-        {
-            setClicConnexion(false);
-            setErreurConnexion(true);
-        }
-    }
+            .then(data => {
+                if (data.length==0) {
+                    setErreurConnexion(true);
+                    setClicConnexion(false);
+                } else {
+                    setErreurConnexion(false);
+                    setData(data);
+                }
+            })
+    };
 
-    useEffect(() => {if (clicConnexion) cliquer();}, [clicConnexion]);
+    useEffect(() => {
+        if (clicConnexion) {
+            API();
+        }
+    }, [clicConnexion]);
+
+    const afficherNotesProf = () => {
+        setClicConnexion(true);
+    };
+
+    const organiserParControle = (donnees) => {
+        const controles = {};
+        donnees.forEach((item) => {
+            const controle = item.nom_controle;
+            if (!controles[controle]) {
+                controles[controle] = [];
+            }
+            controles[controle].push(item);
+        });
+        return controles;
+    };
+
+    const controlesOrganises = organiserParControle(data);
 
     return (
         <>
-        <Bandeau/>
-        <Poulpe/>
+        <Bandeau />
+        <Poulpe />
         {!clicConnexion ? (
-            <form onSubmit={afficherNotesEleve}>
+            <form onSubmit={afficherNotesProf}>
                 <label>Identifiant</label>
                 <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)}/>
                 <label>Mot de passe</label>
@@ -47,11 +66,33 @@ function PageFormulaireEleve() {
             </form>
         ) : (
             <>
-            <h2>Vos notes</h2>
+            {Object.keys(controlesOrganises).map((controle) => (
+                <div key={controle}>
+                    <h2>{controle}</h2>
+                    <table border="1" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+                        <thead>
+                            <tr>
+                                <th>Élèves</th>
+                                <th>Notes</th>
+                                <th>Commentaires</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {controlesOrganises[controle].map((eleve, index) => (
+                                <tr key={index}>
+                                    <td>{eleve.nom_eleve} {eleve.prenom_eleve}</td>
+                                    <td>{eleve.note}</td>
+                                    <td>{eleve.commentaire}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            ))}
             </>
         )}
         </>
     );
 }
 
-export default PageFormulaireEleve;
+export default PageFormulaireProf;

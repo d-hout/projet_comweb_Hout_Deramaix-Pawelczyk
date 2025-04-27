@@ -98,3 +98,9 @@ input:focus {
   border-color: #aa1f40;
   box-shadow: 0 0 5px rgba(170, 31, 64, 0.5);
 }
+
+p {
+  color: #ffe0e0;
+  font-weight: bold;
+  text-align: center;
+}

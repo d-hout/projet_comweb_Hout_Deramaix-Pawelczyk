@@ -3,35 +3,54 @@ import Bandeau from './Bandeau.jsx';
 import Poulpe from './Poulpe.jsx';
 
 function PageFormulaireEleve() {
+    const [data, setData] = useState([]);
     const [clicConnexion, setClicConnexion] = useState(false);
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
-    
-    const afficherNotesEleve = () => {
-        setClicConnexion(true);
-    }
 
-    let json = {name:"",sprites:{front_default:null}};
-    const [data, setData] = useState(json);
-
-    const cliquer = () => {
+    const API = () => {
         fetch(`http://localhost/API/eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
-            .then(datas => {setData(datas)})
-        if (data==[])
-        {
-            setClicConnexion(false);
-            setErreurConnexion(true);
-        }
-    }
+            .then(data => {
+                if (data.length==0) {
+                    setErreurConnexion(true);
+                    setClicConnexion(false);
+                } else {
+                    setErreurConnexion(false);
+                    setData(data);
+                }
+            })
+    };
 
-    useEffect(() => {if (clicConnexion) cliquer();}, [clicConnexion]);
+    useEffect(() => {
+        if (clicConnexion) {
+            API();
+        }
+    }, [clicConnexion]);
+
+    const afficherNotesEleve = () => {
+        setClicConnexion(true);
+    };
+
+    const organiserParMatiere = (donnees) => {
+        const matieres = {};
+        donnees.forEach((item) => {
+            const matiere = item.nom_matiere;
+            if (!matieres[matiere]) {
+                matieres[matiere] = [];
+            }
+            matieres[matiere].push(item);
+        });
+        return matieres;
+    };
+
+    const matieresOrganisees = organiserParMatiere(data);
 
     return (
         <>
-        <Bandeau/>
-        <Poulpe/>
+        <Bandeau />
+        <Poulpe />
         {!clicConnexion ? (
             <form onSubmit={afficherNotesEleve}>
                 <label>Identifiant</label>
@@ -47,7 +66,29 @@ function PageFormulaireEleve() {
             </form>
         ) : (
             <>
-            <h2>Vos notes</h2>
+            {Object.keys(matieresOrganisees).map((matiere) => (
+                <div key={matiere}>
+                    <h2>{matiere}</h2>
+                    <table border="1" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+                        <thead>
+                            <tr>
+                                <th>Nom du contrôle</th>
+                                <th>Notes</th>
+                                <th>Commentaires</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {matieresOrganisees[matiere].map((controle, index) => (
+                                <tr key={index}>
+                                    <td>{controle.nom_controle}</td>
+                                    <td>{controle.note}</td>
+                                    <td>{controle.commentaire}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            ))}
             </>
         )}
         </>

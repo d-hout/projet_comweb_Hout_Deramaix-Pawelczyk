@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Bandeau from './Bandeau.jsx';
 import Poulpe from './Poulpe.jsx';
 import PageFormulaireEleve from './PageFormulaireEleve.jsx';
+import PageFormulaireProf from './PageFormulaireProf.jsx';
 
 function PageAccueilConnexion() {
     const [connexionEleve, setConnexionEleve] = useState(false);
