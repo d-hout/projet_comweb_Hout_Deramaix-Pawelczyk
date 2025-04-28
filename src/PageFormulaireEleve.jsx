@@ -67,9 +67,9 @@ function PageFormulaireEleve() {
         ) : (
             <>
             {Object.keys(matieresOrganisees).map((matiere) => (
-                <div key={matiere}>
+                <div className="tableau">
                     <h2>{matiere}</h2>
-                    <table border="1" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+                    <table>
                         <thead>
                             <tr>
                                 <th>Nom du contrôle</th>
@@ -78,11 +78,11 @@ function PageFormulaireEleve() {
                             </tr>
                         </thead>
                         <tbody>
-                            {matieresOrganisees[matiere].map((controle, index) => (
-                                <tr key={index}>
-                                    <td>{controle.nom_controle}</td>
-                                    <td>{controle.note}</td>
-                                    <td>{controle.commentaire}</td>
+                            {matieresOrganisees[matiere].map(devoir => (
+                                <tr>
+                                    <td>{devoir.nom_controle}</td>
+                                    <td>{devoir.note}</td>
+                                    <td>{devoir.commentaire}</td>
                                 </tr>
                             ))}
                         </tbody>

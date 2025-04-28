@@ -67,9 +67,9 @@ function PageFormulaireProf() {
         ) : (
             <>
             {Object.keys(controlesOrganises).map((controle) => (
-                <div key={controle}>
+                <div className="tableau">
                     <h2>{controle}</h2>
-                    <table border="1" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+                    <table>
                         <thead>
                             <tr>
                                 <th>Élèves</th>
@@ -78,8 +78,8 @@ function PageFormulaireProf() {
                             </tr>
                         </thead>
                         <tbody>
-                            {controlesOrganises[controle].map((eleve, index) => (
-                                <tr key={index}>
+                            {controlesOrganises[controle].map(eleve => (
+                                <tr>
                                     <td>{eleve.nom_eleve} {eleve.prenom_eleve}</td>
                                     <td>{eleve.note}</td>
                                     <td>{eleve.commentaire}</td>

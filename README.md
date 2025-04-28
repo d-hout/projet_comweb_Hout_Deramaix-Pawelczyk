@@ -30,6 +30,8 @@
 
 <h2 id="à-propos-du-projet">À propos du projet</h2>
 
+<img src="images/not_ensc.png" alt="Première interface visible de l'application web Not'ENSC" />
+
 ## Consulter ses notes
 
 Notre projet consiste en la réalisation d'une application web garantissant la **gestion de notes d'une école** 🎓.
@@ -70,7 +72,7 @@ Nous avons également utilisé **XAMPP** en ce qui concerne la gestion des bases
 
 4. Observer le rendu avec l'adresse **localhost** donnée
 
-5. *(Optionnel)* Pour le moment, l'API peut être utilisé à l'aide de XAMPP en local. Glisser-déposer le dossier **API** vers **C:/xampp/htdocs**, lancer **Apache** et **MySQL** et aller sur http://localhost/phpmyadmin.
+5. Pour le moment, l'API est utilisée à l'aide de XAMPP en local. Glisser-déposer le dossier **API** vers **C:/xampp/htdocs**, lancer **Apache** et **MySQL** et aller sur http://localhost/phpmyadmin.
 Dans l'onglet base de données, créer une nouvelle base nommée **not_ensc** puis aller dans l'onglet importer pour importer le fichier **not_ensc.sql**. Puis utiliser l'API avec l'adresse http://localhost/API/eleves.php ou http://localhost/API/professeurs.php
 
 <h2 id="utilisés-dans-ce-projet">Utilisés dans ce projet</h2>
