@@ -33,24 +33,63 @@ function PageFormulaireProf() {
         setClicConnexion(true);
     };
 
-    const organiserParControle = (donnees) => {
-        const controles = {};
-        donnees.forEach((item) => {
-            const controle = item.nom_controle;
-            if (!controles[controle]) {
-                controles[controle] = [];
-            }
-            controles[controle].push(item);
-        });
-        return controles;
+    const afficherTableaux = (donnees) => {
+        const controles = [];
+        const tableaux = [];
+    
+        // Récupérer le nom des contrôles
+        for (let i = 0; i < donnees.length; i++) {
+            const controle = donnees[i].nom_controle;
+            let estPresent = false;
+            for (let j = 0; j < controles.length; j++)
+                if (controles[j] == controle)
+                    estPresent = true;
+            if (estPresent == false)
+                controles.push(controle);
+        }
+    
+        // Générer un tableau pour chaque contrôle
+        for (let i = 0; i < controles.length; i++) {
+            const tableau = [];
+            for (let j = 0; j < donnees.length; j++)
+                if (donnees[j].nom_controle == controles[i]) {
+                    tableau.push(
+                        <tr key={`${donnees[j].nom_controle}_${j}`}>
+                            <td>{donnees[j].nom_eleve} {donnees[j].prenom_eleve}</td>
+                            <td>{donnees[j].note}</td>
+                            <td>{donnees[j].commentaire}</td>
+                        </tr>
+                    );
+                }
+    
+            tableaux.push(
+                <div className="tableau" key={controles[i]}>
+                    <h2>{controles[i]}</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Élèves</th>
+                                <th>Notes</th>
+                                <th>Commentaires</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tableau}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+    
+        return tableaux;
     };
-
-    const controlesOrganises = organiserParControle(data);
+    
+    const notes = afficherTableaux(data);
 
     return (
         <>
-        <Bandeau />
-        <Poulpe />
+        <Bandeau/>
+        <Poulpe/>
         {!clicConnexion ? (
             <form onSubmit={afficherNotesProf}>
                 <label>Identifiant</label>
@@ -66,29 +105,7 @@ function PageFormulaireProf() {
             </form>
         ) : (
             <>
-            {Object.keys(controlesOrganises).map((controle) => (
-                <div className="tableau">
-                    <h2>{controle}</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Élèves</th>
-                                <th>Notes</th>
-                                <th>Commentaires</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {controlesOrganises[controle].map(eleve => (
-                                <tr>
-                                    <td>{eleve.nom_eleve} {eleve.prenom_eleve}</td>
-                                    <td>{eleve.note}</td>
-                                    <td>{eleve.commentaire}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            ))}
+            {notes}
             </>
         )}
         </>

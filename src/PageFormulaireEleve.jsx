@@ -33,24 +33,63 @@ function PageFormulaireEleve() {
         setClicConnexion(true);
     };
 
-    const organiserParMatiere = (donnees) => {
-        const matieres = {};
-        donnees.forEach((item) => {
-            const matiere = item.nom_matiere;
-            if (!matieres[matiere]) {
-                matieres[matiere] = [];
-            }
-            matieres[matiere].push(item);
-        });
-        return matieres;
+    const afficherTableaux = (donnees) => {
+        const matieres = [];
+        const tableaux = [];
+    
+        // Récupérer le nom des matières
+        for (let i = 0; i < donnees.length; i++) {
+            const matiere = donnees[i].nom_matiere;
+            let estPresent = false;
+            for (let j = 0; j < matieres.length; j++)
+                if (matieres[j] == matiere)
+                    estPresent = true;
+            if (estPresent == false)
+                matieres.push(matiere);
+        }
+    
+        // Générer un tableau pour chaque matière
+        for (let i = 0; i < matieres.length; i++) {
+            const tableau = [];
+            for (let j = 0; j < donnees.length; j++)
+                if (donnees[j].nom_matiere == matieres[i]) {
+                    tableau.push(
+                        <tr key={donnees[j].nom_controle}>
+                            <td>{donnees[j].nom_controle}</td>
+                            <td>{donnees[j].note}</td>
+                            <td>{donnees[j].commentaire}</td>
+                        </tr>
+                    );
+                }
+    
+            tableaux.push(
+                <div className="tableau" key={matieres[i]}>
+                    <h2>{matieres[i]}</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom du contrôle</th>
+                                <th>Notes</th>
+                                <th>Commentaires</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tableau}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+    
+        return tableaux;
     };
-
-    const matieresOrganisees = organiserParMatiere(data);
+    
+    const notes = afficherTableaux(data);
 
     return (
         <>
-        <Bandeau />
-        <Poulpe />
+        <Bandeau/>
+        <Poulpe/>
         {!clicConnexion ? (
             <form onSubmit={afficherNotesEleve}>
                 <label>Identifiant</label>
@@ -66,29 +105,7 @@ function PageFormulaireEleve() {
             </form>
         ) : (
             <>
-            {Object.keys(matieresOrganisees).map((matiere) => (
-                <div className="tableau">
-                    <h2>{matiere}</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nom du contrôle</th>
-                                <th>Notes</th>
-                                <th>Commentaires</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {matieresOrganisees[matiere].map(devoir => (
-                                <tr>
-                                    <td>{devoir.nom_controle}</td>
-                                    <td>{devoir.note}</td>
-                                    <td>{devoir.commentaire}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            ))}
+            {notes}
             </>
         )}
         </>
