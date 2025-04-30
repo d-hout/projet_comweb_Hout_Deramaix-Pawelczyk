@@ -21,9 +21,10 @@ function recupererNotes($nom_utilisateur, $mdp)
     $requete = "SELECT nom_matiere, nom_controle, note, commentaire
     FROM notes
     JOIN eleves ON notes.eleve_id=eleves.id
-    WHERE nom_utilisateur_eleve LIKE '{$nom_utilisateur}' AND mdp_eleve LIKE '{$mdp}'
+    WHERE nom_utilisateur_eleve = :nom_utilisateur AND mdp_eleve = :mdp
     ORDER BY nom_matiere";
-    $resultat = $bdd->query($requete);
+    $resultat = $bdd->prepare($requete);
+    $resultat->execute([':nom_utilisateur' => $nom_utilisateur, ':mdp' => $mdp]);
     $tab = $resultat->fetchAll();
     envoiJSON($tab);
 }
