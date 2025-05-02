@@ -8,6 +8,7 @@ function PageFormulaireProf() {
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
+    const [groupesSelectionnes, setGroupesSelectionnes] = useState({1: true, 2: true, 3: true, 4: true});
 
     const API = () => {
         fetch(`http://localhost/API/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
@@ -33,6 +34,12 @@ function PageFormulaireProf() {
         setClicConnexion(true);
     };
 
+    const afficherNotesGroupes = (numeroGroupe) => {
+        const nouvelEtat = {...groupesSelectionnes};
+        nouvelEtat[numeroGroupe] = !groupesSelectionnes[numeroGroupe];
+        setGroupesSelectionnes(nouvelEtat);
+    };
+
     const afficherTableaux = (donnees) => {
         const controles = [];
         const tableaux = [];
@@ -52,7 +59,7 @@ function PageFormulaireProf() {
         for (let i = 0; i < controles.length; i++) {
             const tableau = [];
             for (let j = 0; j < donnees.length; j++)
-                if (donnees[j].nom_controle == controles[i]) {
+                if (donnees[j].nom_controle == controles[i] && groupesSelectionnes[donnees[j].groupe]==true) {
                     tableau.push(
                         <tr key={`${donnees[j].nom_controle}_${j}`}>
                             <td>{donnees[j].nom_eleve} {donnees[j].prenom_eleve}</td>
@@ -63,7 +70,7 @@ function PageFormulaireProf() {
                 }
     
             tableaux.push(
-                <div className="tableau" key={controles[i]}>
+                <div className='tableau' key={controles[i]}>
                     <h2>{controles[i]}</h2>
                     <table>
                         <thead>
@@ -105,6 +112,20 @@ function PageFormulaireProf() {
             </form>
         ) : (
             <>
+            <div className="groupes">
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[1]} onChange={() => afficherNotesGroupes(1)}/> Groupe 1
+                </label>
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[2]} onChange={() => afficherNotesGroupes(2)}/> Groupe 2
+                </label>
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[3]} onChange={() => afficherNotesGroupes(3)}/> Groupe 3
+                </label>
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[4]} onChange={() => afficherNotesGroupes(4)}/> Groupe 4
+                </label>
+            </div>
             {notes}
             </>
         )}

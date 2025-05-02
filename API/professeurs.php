@@ -18,7 +18,7 @@ function recupererNotes($nom_utilisateur, $mdp)
         // Si erreur, tout arrêter
         die('Erreur : '. $e->getMessage());
     }
-    $requete = "SELECT nom_eleve, prenom_eleve, nom_controle, note, commentaire
+    $requete = "SELECT nom_eleve, prenom_eleve, nom_controle, note, commentaire, groupe
     FROM notes
     JOIN eleves ON notes.eleve_id=eleves.id JOIN professeurs ON notes.nom_matiere=professeurs.nom_matiere
     WHERE nom_utilisateur_prof = :nom_utilisateur AND mdp_prof = :mdp
