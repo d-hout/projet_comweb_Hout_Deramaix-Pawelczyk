@@ -85,10 +85,10 @@ label {
 
 input {
   padding: 0.8em 1.2em;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 8px;
   font-size: 1em;
-  color: #333;
+  color: #333333;
   outline: none;
   transition: all 0.3s ease;
 }
@@ -153,29 +153,40 @@ td, th {
 
 .tableau table th:nth-child(1),
 .tableau table td:nth-child(1) {
-  width: 30%;
+  width: 26%;
 }
 
 .tableau table th:nth-child(2),
 .tableau table td:nth-child(2) {
-  width: 10%;
+  width: 12%;
 }
 
 .tableau table th:nth-child(3),
 .tableau table td:nth-child(3) {
-  width: 60%;
+  width: 12%;
 }
 
-.tableau:last-child {
-  margin-bottom: 50px;
+.tableau table th:nth-child(4),
+.tableau table td:nth-child(4) {
+  width: 50%;
 }
 
-.groupes {
+.groupes, .moyenneGenerale {
   position: fixed;
-  top: 180px;
-  left: 20px;
+  top: 200px;
+  left: 40px;
   width: max-content;
   max-width: 120px;
   padding: 10px;
+  color: white;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.moyenne {
+  text-align: right;
+  font-weight: bold;
+}
+
+.notes {
+  margin-bottom: 50px;
 }

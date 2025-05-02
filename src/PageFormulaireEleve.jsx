@@ -50,16 +50,27 @@ function PageFormulaireEleve() {
     
         // Générer un tableau pour chaque matière
         for (let i = 0; i < matieres.length; i++) {
+            let sommeNotesPonderees = 0;
+            let sommeCoefficients = 0;
             const tableau = [];
             for (let j = 0; j < donnees.length; j++)
                 if (donnees[j].nom_matiere == matieres[i]) {
                     tableau.push(
                         <tr key={donnees[j].nom_controle}>
                             <td>{donnees[j].nom_controle}</td>
+                            <td>{donnees[j].coefficient}</td>
                             <td>{donnees[j].note}</td>
                             <td>{donnees[j].commentaire}</td>
                         </tr>
                     );
+                    let coefficient = donnees[j].coefficient;
+                    let [note, surCombien] = donnees[j].note.split('/');
+                    coefficient = parseFloat(coefficient);
+                    note = parseFloat(note);
+                    surCombien = parseFloat(surCombien);
+                    const noteSurVingt = note*20/surCombien;
+                    sommeNotesPonderees += noteSurVingt*coefficient;
+                    sommeCoefficients += coefficient;
                 }
     
             tableaux.push(
@@ -68,7 +79,8 @@ function PageFormulaireEleve() {
                     <table>
                         <thead>
                             <tr>
-                                <th>Nom du contrôle</th>
+                                <th>Nom des contrôles</th>
+                                <th>Coefficients</th>
                                 <th>Notes</th>
                                 <th>Commentaires</th>
                             </tr>
@@ -76,12 +88,34 @@ function PageFormulaireEleve() {
                         <tbody>
                             {tableau}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td className='moyenne' colSpan="4">Moyenne : {(sommeNotesPonderees/sommeCoefficients).toFixed(2)}/20</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             );
         }
     
         return tableaux;
+    };
+
+    const calculerMoyenneGenerale = (donnees) => {
+        let sommeNotesPonderees = 0;
+        let sommeCoefficients = 0;
+    
+        for (let i = 0; i < donnees.length; i++) {
+            const coefficient = parseFloat(donnees[i].coefficient);
+            const [noteStr, surCombienStr] = donnees[i].note.split('/');
+            const note = parseFloat(noteStr);
+            const surCombien = parseFloat(surCombienStr);
+            const noteSurVingt = note*20/surCombien;
+            sommeNotesPonderees += noteSurVingt*coefficient;
+            sommeCoefficients += coefficient;
+        }
+    
+        return (sommeNotesPonderees/sommeCoefficients).toFixed(2);
     };
     
     const notes = afficherTableaux(data);
@@ -105,7 +139,12 @@ function PageFormulaireEleve() {
             </form>
         ) : (
             <>
-            {notes}
+            <div className="notes">
+                {notes}
+            </div>
+            <div className='moyenneGenerale'>
+                <strong>Moyenne générale :</strong> {calculerMoyenneGenerale(data)}/20
+            </div>
             </>
         )}
         </>

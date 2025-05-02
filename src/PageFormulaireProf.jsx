@@ -57,16 +57,27 @@ function PageFormulaireProf() {
     
         // Générer un tableau pour chaque contrôle
         for (let i = 0; i < controles.length; i++) {
+            let sommeNotesPonderees = 0;
+            let sommeCoefficients = 0;
             const tableau = [];
             for (let j = 0; j < donnees.length; j++)
                 if (donnees[j].nom_controle == controles[i] && groupesSelectionnes[donnees[j].groupe]==true) {
                     tableau.push(
                         <tr key={`${donnees[j].nom_controle}_${j}`}>
-                            <td>{donnees[j].nom_eleve} {donnees[j].prenom_eleve}</td>
+                            <td>{donnees[j].nom_eleve}</td>
+                            <td>{donnees[j].prenom_eleve}</td>
                             <td>{donnees[j].note}</td>
                             <td>{donnees[j].commentaire}</td>
                         </tr>
                     );
+                    let coefficient = donnees[j].coefficient;
+                    let [note, surCombien] = donnees[j].note.split('/');
+                    coefficient = parseFloat(coefficient);
+                    note = parseFloat(note);
+                    surCombien = parseFloat(surCombien);
+                    const noteSurVingt = note*20/surCombien;
+                    sommeNotesPonderees += noteSurVingt*coefficient;
+                    sommeCoefficients += coefficient;
                 }
     
             tableaux.push(
@@ -75,7 +86,8 @@ function PageFormulaireProf() {
                     <table>
                         <thead>
                             <tr>
-                                <th>Élèves</th>
+                                <th>Noms</th>
+                                <th>Prénoms</th>
                                 <th>Notes</th>
                                 <th>Commentaires</th>
                             </tr>
@@ -83,6 +95,11 @@ function PageFormulaireProf() {
                         <tbody>
                             {tableau}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td className='moyenne' colSpan="4">Coefficient : {sommeCoefficients/tableau.length} — Moyenne : {(sommeNotesPonderees/sommeCoefficients).toFixed(2)}/20</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             );
@@ -126,7 +143,9 @@ function PageFormulaireProf() {
                     <input type="checkbox" checked={groupesSelectionnes[4]} onChange={() => afficherNotesGroupes(4)}/> Groupe 4
                 </label>
             </div>
-            {notes}
+            <div className="notes">
+                {notes}
+            </div>
             </>
         )}
         </>
