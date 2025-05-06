@@ -4,6 +4,9 @@ import Poulpe from './Poulpe.jsx';
 
 function PageFormulaireProf() {
     const [data, setData] = useState([]);
+    const [data2, setData2] = useState([]);
+    const [nomProf, setNomProf] = useState('');
+    const [prenomProf, setPrenomProf] = useState('');
     const [clicConnexion, setClicConnexion] = useState(false);
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
@@ -20,6 +23,20 @@ function PageFormulaireProf() {
                 } else {
                     setErreurConnexion(false);
                     setData(data);
+                }
+            })
+
+        fetch(`http://localhost/API/nomPrenomProfesseur.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
+            .then(r => r.json())
+            .then(data2 => {
+                if (data2.length==0) {
+                    setErreurConnexion(true);
+                    setClicConnexion(false);
+                } else {
+                    setErreurConnexion(false);
+                    setData2(data2);
+                    setNomProf(data2[0].nom_prof);
+                    setPrenomProf(data2[0].prenom_prof);
                 }
             })
     };
@@ -114,6 +131,9 @@ function PageFormulaireProf() {
         <>
         <Bandeau/>
         <Poulpe/>
+        <div className='nomProf'>
+                <p>Bienvenue, {nomProf} {prenomProf}</p>
+        </div>
         {!clicConnexion ? (
             <form onSubmit={afficherNotesProf}>
                 <label>Identifiant</label>
