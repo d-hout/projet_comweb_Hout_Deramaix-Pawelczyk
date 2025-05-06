@@ -4,6 +4,9 @@ import Poulpe from './Poulpe.jsx';
 
 function PageFormulaireEleve() {
     const [data, setData] = useState([]);
+    const [data2, setData2] = useState([]);
+    const [nomEleve, setNomEleve] = useState('');
+    const [prenomEleve, setPrenomEleve] = useState('');
     const [clicConnexion, setClicConnexion] = useState(false);
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
@@ -21,6 +24,21 @@ function PageFormulaireEleve() {
                     setData(data);
                 }
             })
+
+        fetch(`http://localhost/API/nomPrenomEleve.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
+            .then(r => r.json())
+            .then(data2 => {
+                if (data2.length==0) {
+                    setErreurConnexion(true);
+                    setClicConnexion(false);
+                } else {
+                    setErreurConnexion(false);
+                    setData2(data2);
+                    setNomEleve(data2[0].nom_eleve);
+                    setPrenomEleve(data2[0].prenom_eleve);
+                }
+            })
+        
     };
 
     useEffect(() => {
@@ -139,6 +157,9 @@ function PageFormulaireEleve() {
             </form>
         ) : (
             <>
+            <div className='nomEleve'>
+                <p>Bienvenue, {nomEleve} {prenomEleve}</p>
+            </div>
             <div className="notes">
                 {notes}
             </div>
