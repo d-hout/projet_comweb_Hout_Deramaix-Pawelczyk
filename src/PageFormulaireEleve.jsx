@@ -11,12 +11,14 @@ function PageFormulaireEleve() {
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
+    const [erreurChampsVides, setErreurChampsVides] = useState(false);
+
 
     const API = () => {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data => {
-                if (data.length==0) {
+                if (data.length == 0) {
                     setErreurConnexion(true);
                     setClicConnexion(false);
                 } else {
@@ -28,7 +30,7 @@ function PageFormulaireEleve() {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/nom_prenom_eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data2 => {
-                if (data2.length==0) {
+                if (data2.length == 0) {
                     setErreurConnexion(true);
                     setClicConnexion(false);
                 } else {
@@ -38,7 +40,7 @@ function PageFormulaireEleve() {
                     setPrenomEleve(data2[0].prenom_eleve);
                 }
             })
-        
+
     };
 
     useEffect(() => {
@@ -54,7 +56,7 @@ function PageFormulaireEleve() {
     const afficherTableaux = (donnees) => {
         const matieres = [];
         const tableaux = [];
-    
+
         // Récupérer le nom des matières
         for (let i = 0; i < donnees.length; i++) {
             const matiere = donnees[i].nom_matiere;
@@ -65,7 +67,7 @@ function PageFormulaireEleve() {
             if (estPresent == false)
                 matieres.push(matiere);
         }
-    
+
         // Générer un tableau pour chaque matière
         for (let i = 0; i < matieres.length; i++) {
             let sommeNotesPonderees = 0;
@@ -86,11 +88,11 @@ function PageFormulaireEleve() {
                     coefficient = parseFloat(coefficient);
                     note = parseFloat(note);
                     surCombien = parseFloat(surCombien);
-                    const noteSurVingt = note*20/surCombien;
-                    sommeNotesPonderees += noteSurVingt*coefficient;
+                    const noteSurVingt = note * 20 / surCombien;
+                    sommeNotesPonderees += noteSurVingt * coefficient;
                     sommeCoefficients += coefficient;
                 }
-    
+
             tableaux.push(
                 <div className="tableau" key={matieres[i]}>
                     <h2>{matieres[i]}</h2>
@@ -108,66 +110,81 @@ function PageFormulaireEleve() {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td className='moyenne' colSpan="4">Moyenne : {(sommeNotesPonderees/sommeCoefficients).toFixed(2)}/20</td>
+                                <td className='moyenne' colSpan="4">Moyenne : {(sommeNotesPonderees / sommeCoefficients).toFixed(2)}/20</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             );
         }
-    
+
         return tableaux;
     };
 
     const calculerMoyenneGenerale = (donnees) => {
         let sommeNotesPonderees = 0;
         let sommeCoefficients = 0;
-    
+
         for (let i = 0; i < donnees.length; i++) {
             const coefficient = parseFloat(donnees[i].coefficient);
             const [noteStr, surCombienStr] = donnees[i].note.split('/');
             const note = parseFloat(noteStr);
             const surCombien = parseFloat(surCombienStr);
-            const noteSurVingt = note*20/surCombien;
-            sommeNotesPonderees += noteSurVingt*coefficient;
+            const noteSurVingt = note * 20 / surCombien;
+            sommeNotesPonderees += noteSurVingt * coefficient;
             sommeCoefficients += coefficient;
         }
-    
-        return (sommeNotesPonderees/sommeCoefficients).toFixed(2);
+
+        return (sommeNotesPonderees / sommeCoefficients).toFixed(2);
     };
-    
+
     const notes = afficherTableaux(data);
 
     return (
         <>
-        <Bandeau/>
-        <Poulpe/>
-        {!clicConnexion ? (
-            <form onSubmit={afficherNotesEleve}>
-                <label>Identifiant</label>
-                <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)}/>
-                <label>Mot de passe</label>
-                <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)}/>
-                <button type="submit">Se connecter</button>
-                {erreurConnexion ? (
-                    <p>Identifiant ou mot de passe incorrect !</p>
-                ) : (
-                    <p></p>
-                )}
-            </form>
-        ) : (
-            <>
-            <div className='nomEleve'>
-                <p className='nomEleve'>Bienvenue, {nomEleve} {prenomEleve}</p>
-            </div>
-            <div className="notes">
-                {notes}
-            </div>
-            <div className='moyenneGenerale'>
-                <strong>Moyenne générale :</strong> {calculerMoyenneGenerale(data)}/20
-            </div>
-            </>
-        )}
+            <Bandeau />
+            <Poulpe />
+            {!clicConnexion ? (
+
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+
+
+                    if (identifiant === '' || mdp === '' || /^\s*$/.test(identifiant) || /^\s*$/.test(mdp)) {
+                        setErreurChampsVides(true);
+                        setErreurConnexion(false);
+                        return;
+                    }
+
+                    setErreurChampsVides(false);
+                    afficherNotesEleve();
+                }}>
+                    <label>Identifiant</label>
+                    <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
+                    <label>Mot de passe</label>
+                    <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)} />
+                    <button type="submit">Se connecter</button>
+                    {erreurChampsVides ? (
+                        <p>Veuillez remplir tous les champs</p>  // Message d'erreur pour champs vides
+                    ) : erreurConnexion ? (
+                        <p>Identifiant ou mot de passe incorrect !</p>
+                    ) : (
+                        <p></p>
+                    )}
+                </form>
+            ) : (
+                <>
+                    <div className='nomEleve'>
+                        <p className='nomEleve'>Bienvenue, {nomEleve} {prenomEleve}</p>
+                    </div>
+                    <div className="notes">
+                        {notes}
+                    </div>
+                    <div className='moyenneGenerale'>
+                        <strong>Moyenne générale :</strong> {calculerMoyenneGenerale(data)}/20
+                    </div>
+                </>
+            )}
         </>
     );
 }
