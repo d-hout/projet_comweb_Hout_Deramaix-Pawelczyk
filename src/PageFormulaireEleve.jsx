@@ -158,7 +158,7 @@ function PageFormulaireEleve() {
         ) : (
             <>
             <div className='nomEleve'>
-                <p>Bienvenue, {nomEleve} {prenomEleve}</p>
+                <p className='nomEleve'>Bienvenue, {nomEleve} {prenomEleve}</p>
             </div>
             <div className="notes">
                 {notes}

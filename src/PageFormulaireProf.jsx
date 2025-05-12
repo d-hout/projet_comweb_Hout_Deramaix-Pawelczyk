@@ -131,9 +131,6 @@ function PageFormulaireProf() {
         <>
         <Bandeau/>
         <Poulpe/>
-        <div className='nomProf'>
-                <p>Bienvenue, {nomProf} {prenomProf}</p>
-        </div>
         {!clicConnexion ? (
             <form onSubmit={afficherNotesProf}>
                 <label>Identifiant</label>
@@ -149,6 +146,9 @@ function PageFormulaireProf() {
             </form>
         ) : (
             <>
+            <div className='nomProf'>
+                <p className='nomProf'>Bienvenue, {nomProf} {prenomProf}</p>
+            </div>
             <div className="groupes">
                 <label>
                     <input type="checkbox" checked={groupesSelectionnes[1]} onChange={() => afficherNotesGroupes(1)}/> Groupe 1

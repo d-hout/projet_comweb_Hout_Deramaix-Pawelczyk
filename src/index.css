@@ -7,9 +7,9 @@
 }
 
 :root {
-  font-family: system-ui, Verdana, Arial, Helvetica, sans-serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 1.3em;
-  background-color: #db2852;
+  background-color: #ffe5df;
 }
 
 body {
@@ -17,6 +17,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .bandeau {
@@ -30,7 +31,7 @@ body {
   height: 160px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  background-color: white;
+  background-color: #aa1f40;
 }
 
 .logo {
@@ -98,10 +99,19 @@ input:focus {
   box-shadow: 0 0 5px rgba(170, 31, 64, 0.5);
 }
 
+
 p {
-  color: #ffe0e0;
+  color: white;
   font-weight: bold;
   text-align: center;
+}
+
+.nomEleve{
+  color : #aa1f40;
+}
+
+.nomProf{
+  color : #aa1f40;
 }
 
 .tableau {
@@ -120,9 +130,9 @@ p {
   width: 100%;
   max-width: 900px;
   border-collapse: collapse;
-  font-family: 'Arial', sans-serif;
-  background-color: #ff4d4d;
-  border: 2px solid #ff4d4d;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background-color: #aa1f40;
+  border: 2px solid #aa1f40;
   border-radius: 8px;
   overflow: hidden;
   table-layout: fixed;
@@ -132,24 +142,33 @@ thead th {
   padding: 12px 15px;
   font-size: 16px;
   text-align: left;
-  border-bottom: 2px solid #e60000;
+  border-bottom: 2px solid #aa1f40;
 }
 
 tbody tr {
-  border-bottom: 1px solid #ffcccc;
-  background-color: #fff5f5;
+  border-bottom: 1px solid #aa1f40;
+  background-color: #ffe5df;
 }
 
 tbody tr:hover {
   background-color: #ffcccc;
 }
 
-td, th {
+td{
   padding: 10px 15px;
   font-size: 15px;
-  color: #333333;
+  color: black;
   border: 1px solid #ffb3b3;
 }
+
+th {
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #ffe5df;
+  border: 1px solid #ffb3b3;
+}
+
+
 
 .tableau table th:nth-child(1),
 .tableau table td:nth-child(1) {
@@ -176,15 +195,17 @@ td, th {
   top: 200px;
   left: 40px;
   width: max-content;
-  max-width: 120px;
+  max-width: 130px;
   padding: 10px;
-  color: white;
+  color: #ffe5df;
+  background :#aa1f40 ; 
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .moyenne {
   text-align: right;
   font-weight: bold;
+  color: #ffe5df;
 }
 
 .notes {

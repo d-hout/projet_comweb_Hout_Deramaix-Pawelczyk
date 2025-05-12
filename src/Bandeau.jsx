@@ -1,7 +1,7 @@
 function Bandeau() {
     return (
         <div className="bandeau">
-            <img className="logo" src="/images/logo.png" alt="Logo Not'ENSC"/>
+            <img className="logo" src="/images/logo.png" alt="Logo de Not'ENSC"/>
         </div>
     );
 }
