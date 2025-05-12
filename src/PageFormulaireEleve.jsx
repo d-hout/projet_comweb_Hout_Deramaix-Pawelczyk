@@ -13,7 +13,7 @@ function PageFormulaireEleve() {
     const [mdp, setMdp] = useState('');
 
     const API = () => {
-        fetch(`http://localhost/API/eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
+        fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data => {
                 if (data.length==0) {
@@ -25,7 +25,7 @@ function PageFormulaireEleve() {
                 }
             })
 
-        fetch(`http://localhost/API/nomPrenomEleve.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
+        fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/nom_prenom_eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data2 => {
                 if (data2.length==0) {
