@@ -14,7 +14,7 @@ function PageFormulaireProf() {
     const [groupesSelectionnes, setGroupesSelectionnes] = useState({1: true, 2: true, 3: true, 4: true});
 
     const API = () => {
-        fetch(`http://localhost/API/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
+        fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data => {
                 if (data.length==0) {
@@ -26,7 +26,7 @@ function PageFormulaireProf() {
                 }
             })
 
-        fetch(`http://localhost/API/nomPrenomProfesseur.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
+        fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/nom_prenom_professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data2 => {
                 if (data2.length==0) {
@@ -132,7 +132,7 @@ function PageFormulaireProf() {
         <Bandeau/>
         <Poulpe/>
         <div className='nomProf'>
-                <p>Bienvenue, {nomProf} {prenomProf}</p>
+                <p>Bienvenue, {prenomProf} {nomProf}</p>
         </div>
         {!clicConnexion ? (
             <form onSubmit={afficherNotesProf}>

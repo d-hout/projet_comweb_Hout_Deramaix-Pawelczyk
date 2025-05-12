@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `not_ensc`;
-USE `not_ensc`;
+CREATE DATABASE IF NOT EXISTS `bpawelczyk`;
+USE `bpawelczyk`;
 
 DROP TABLE IF EXISTS eleves;
 CREATE TABLE IF NOT EXISTS eleves (

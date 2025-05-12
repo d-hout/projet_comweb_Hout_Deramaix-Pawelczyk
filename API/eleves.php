@@ -9,9 +9,9 @@ function recupererNotes($nom_utilisateur, $mdp)
 {
     header('Access-Control-Allow-Origin: *'); // Autorise toutes les origines
     $host = 'localhost'; // Variables de connexion
-    $dbname = 'not_ensc';
-    $username = 'root';
-    $password = '';
+    $dbname = 'bpawelczyk';
+    $username = 'bpawelczyk';
+    $password = 'avion';
     try {
         $bdd = new PDO('mysql:host='. $host .';dbname='. $dbname .';charset=utf8', $username, $password);
     } catch(Exception $e) {
@@ -32,7 +32,7 @@ function recupererNotes($nom_utilisateur, $mdp)
 if (empty($_GET['nom_utilisateur']) || empty($_GET['mdp']))
 {
     header("Content-Type: text/html; charset=UTF-8");
-    echo "L'API s'utilise en écrivant localhost/API/eleves.php?nom_utilisateur={NOM D'UTILISATEUR}&mdp={MOT DE PASSE} pour récupérer les informations.";
+    echo "L'API s'utilise en écrivant bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/eleves.php?nom_utilisateur={NOM D'UTILISATEUR}&mdp={MOT DE PASSE} pour récupérer les informations.";
 }
 else
 {
