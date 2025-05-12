@@ -11,13 +11,16 @@ function PageFormulaireProf() {
     const [erreurConnexion, setErreurConnexion] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
-    const [groupesSelectionnes, setGroupesSelectionnes] = useState({1: true, 2: true, 3: true, 4: true});
+    const [groupesSelectionnes, setGroupesSelectionnes] = useState({ 1: true, 2: true, 3: true, 4: true });
+    const [erreurChamps, setErreurChamps] = useState(false);
+
+
 
     const API = () => {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data => {
-                if (data.length==0) {
+                if (data.length == 0) {
                     setErreurConnexion(true);
                     setClicConnexion(false);
                 } else {
@@ -29,7 +32,7 @@ function PageFormulaireProf() {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/nom_prenom_professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data2 => {
-                if (data2.length==0) {
+                if (data2.length == 0) {
                     setErreurConnexion(true);
                     setClicConnexion(false);
                 } else {
@@ -41,18 +44,26 @@ function PageFormulaireProf() {
             })
     };
 
+
     useEffect(() => {
         if (clicConnexion) {
             API();
         }
     }, [clicConnexion]);
 
-    const afficherNotesProf = () => {
-        setClicConnexion(true);
+    const afficherNotesProf = (e) => {
+        e.preventDefault();
+        if (identifiant === '' || mdp === '') {
+            setErreurChamps(true);
+            setErreurConnexion(false);
+        } else {
+            setErreurChamps(false);
+            setClicConnexion(true);
+        }
     };
 
     const afficherNotesGroupes = (numeroGroupe) => {
-        const nouvelEtat = {...groupesSelectionnes};
+        const nouvelEtat = { ...groupesSelectionnes };
         nouvelEtat[numeroGroupe] = !groupesSelectionnes[numeroGroupe];
         setGroupesSelectionnes(nouvelEtat);
     };
@@ -60,7 +71,7 @@ function PageFormulaireProf() {
     const afficherTableaux = (donnees) => {
         const controles = [];
         const tableaux = [];
-    
+
         // Récupérer le nom des contrôles
         for (let i = 0; i < donnees.length; i++) {
             const controle = donnees[i].nom_controle;
@@ -71,14 +82,14 @@ function PageFormulaireProf() {
             if (estPresent == false)
                 controles.push(controle);
         }
-    
+
         // Générer un tableau pour chaque contrôle
         for (let i = 0; i < controles.length; i++) {
             let sommeNotesPonderees = 0;
             let sommeCoefficients = 0;
             const tableau = [];
             for (let j = 0; j < donnees.length; j++)
-                if (donnees[j].nom_controle == controles[i] && groupesSelectionnes[donnees[j].groupe]==true) {
+                if (donnees[j].nom_controle == controles[i] && groupesSelectionnes[donnees[j].groupe] == true) {
                     tableau.push(
                         <tr key={`${donnees[j].nom_controle}_${j}`}>
                             <td>{donnees[j].nom_eleve}</td>
@@ -92,11 +103,11 @@ function PageFormulaireProf() {
                     coefficient = parseFloat(coefficient);
                     note = parseFloat(note);
                     surCombien = parseFloat(surCombien);
-                    const noteSurVingt = note*20/surCombien;
-                    sommeNotesPonderees += noteSurVingt*coefficient;
+                    const noteSurVingt = note * 20 / surCombien;
+                    sommeNotesPonderees += noteSurVingt * coefficient;
                     sommeCoefficients += coefficient;
                 }
-    
+
             tableaux.push(
                 <div className='tableau' key={controles[i]}>
                     <h2>{controles[i]}</h2>
@@ -114,60 +125,57 @@ function PageFormulaireProf() {
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td className='moyenne' colSpan="4">Coefficient : {sommeCoefficients/tableau.length} — Moyenne : {(sommeNotesPonderees/sommeCoefficients).toFixed(2)}/20</td>
+                                <td className='moyenne' colSpan="4">Coefficient : {sommeCoefficients / tableau.length} — Moyenne : {(sommeNotesPonderees / sommeCoefficients).toFixed(2)}/20</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             );
         }
-    
+
         return tableaux;
     };
-    
+
     const notes = afficherTableaux(data);
 
     return (
         <>
-        <Bandeau/>
-        <Poulpe/>
-        {!clicConnexion ? (
-            <form onSubmit={afficherNotesProf}>
-                <label>Identifiant</label>
-                <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)}/>
-                <label>Mot de passe</label>
-                <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)}/>
-                <button type="submit">Se connecter</button>
-                {erreurConnexion ? (
-                    <p>Identifiant ou mot de passe incorrect !</p>
-                ) : (
-                    <p></p>
-                )}
-            </form>
-        ) : (
-            <>
-            <div className='nomProf'>
-                <p className='nomProf'>Bienvenue, {nomProf} {prenomProf}</p>
-            </div>
-            <div className="groupes">
-                <label>
-                    <input type="checkbox" checked={groupesSelectionnes[1]} onChange={() => afficherNotesGroupes(1)}/> Groupe 1
-                </label>
-                <label>
-                    <input type="checkbox" checked={groupesSelectionnes[2]} onChange={() => afficherNotesGroupes(2)}/> Groupe 2
-                </label>
-                <label>
-                    <input type="checkbox" checked={groupesSelectionnes[3]} onChange={() => afficherNotesGroupes(3)}/> Groupe 3
-                </label>
-                <label>
-                    <input type="checkbox" checked={groupesSelectionnes[4]} onChange={() => afficherNotesGroupes(4)}/> Groupe 4
-                </label>
-            </div>
-            <div className="notes">
-                {notes}
-            </div>
-            </>
-        )}
+            <Bandeau />
+            <Poulpe />
+            {!clicConnexion ? (
+                <form onSubmit={afficherNotesProf}>
+                    <label>Identifiant</label>
+                    <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
+                    <label>Mot de passe</label>
+                    <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)} />
+                    <button type="submit">Se connecter</button>
+                    {erreurChamps && <p>Veuillez remplir tous les champs.</p>}
+                    {erreurConnexion && <p>Identifiant ou mot de passe incorrect !</p>}
+                </form>
+            ) : (
+                <>
+                    <div className='nomProf'>
+                        <p className='nomProf'>Bienvenue, {nomProf} {prenomProf}</p>
+                    </div>
+                    <div className="groupes">
+                        <label>
+                            <input type="checkbox" checked={groupesSelectionnes[1]} onChange={() => afficherNotesGroupes(1)} /> Groupe 1
+                        </label>
+                        <label>
+                            <input type="checkbox" checked={groupesSelectionnes[2]} onChange={() => afficherNotesGroupes(2)} /> Groupe 2
+                        </label>
+                        <label>
+                            <input type="checkbox" checked={groupesSelectionnes[3]} onChange={() => afficherNotesGroupes(3)} /> Groupe 3
+                        </label>
+                        <label>
+                            <input type="checkbox" checked={groupesSelectionnes[4]} onChange={() => afficherNotesGroupes(4)} /> Groupe 4
+                        </label>
+                    </div>
+                    <div className="notes">
+                        {notes}
+                    </div>
+                </>
+            )}
         </>
     );
 }
