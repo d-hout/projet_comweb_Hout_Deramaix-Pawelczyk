@@ -9,10 +9,9 @@ function PageFormulaireEleve() {
     const [prenomEleve, setPrenomEleve] = useState('');
     const [clicConnexion, setClicConnexion] = useState(false);
     const [erreurConnexion, setErreurConnexion] = useState(false);
+    const [erreurChampsVides, setErreurChampsVides] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
-    const [erreurChampsVides, setErreurChampsVides] = useState(false);
-
 
     const API = () => {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
@@ -40,7 +39,6 @@ function PageFormulaireEleve() {
                     setPrenomEleve(data2[0].prenom_eleve);
                 }
             })
-
     };
 
     useEffect(() => {
@@ -49,9 +47,16 @@ function PageFormulaireEleve() {
         }
     }, [clicConnexion]);
 
-    const afficherNotesEleve = () => {
-        setClicConnexion(true);
-    };
+    const afficherNotesEleve = (e) => {
+        e.preventDefault(); // Empêcher le rechargement de la page
+        if (identifiant.trim() == "" || mdp.trim() == "") {
+            setErreurChampsVides(true);
+            setErreurConnexion(false);
+        } else {
+            setErreurChampsVides(false);
+            setClicConnexion(true);
+        }
+    }
 
     const afficherTableaux = (donnees) => {
         const matieres = [];
@@ -142,49 +147,34 @@ function PageFormulaireEleve() {
 
     return (
         <>
-            <Bandeau />
-            <Poulpe />
-            {!clicConnexion ? (
-
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-
-
-                    if (identifiant === '' || mdp === '' || /^\s*$/.test(identifiant) || /^\s*$/.test(mdp)) {
-                        setErreurChampsVides(true);
-                        setErreurConnexion(false);
-                        return;
-                    }
-
-                    setErreurChampsVides(false);
-                    afficherNotesEleve();
-                }}>
-                    <label>Identifiant</label>
-                    <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
-                    <label>Mot de passe</label>
-                    <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)} />
-                    <button type="submit">Se connecter</button>
-                    {erreurChampsVides ? (
-                        <p>Veuillez remplir tous les champs</p>  // Message d'erreur pour champs vides
-                    ) : erreurConnexion ? (
-                        <p>Identifiant ou mot de passe incorrect !</p>
-                    ) : (
-                        <p></p>
-                    )}
-                </form>
-            ) : (
-                <>
-                    <div className='nomEleve'>
-                        <p className='nomEleve'>Bienvenue, {nomEleve} {prenomEleve}</p>
-                    </div>
-                    <div className="notes">
-                        {notes}
-                    </div>
-                    <div className='moyenneGenerale'>
-                        <strong>Moyenne générale :</strong> {calculerMoyenneGenerale(data)}/20
-                    </div>
-                </>
-            )}
+        <Bandeau/>
+        <Poulpe/>
+        {!clicConnexion ? (
+            <form onSubmit={afficherNotesEleve}>
+                <label>Identifiant</label>
+                <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)}/>
+                <label>Mot de passe</label>
+                <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)}/>
+                <button type="submit">Se connecter</button>
+                {erreurChampsVides ? (
+                    <p>Veuillez remplir tous les champs !</p>
+                ) : erreurConnexion ? (
+                    <p>Identifiant ou mot de passe incorrect !</p>
+                ) : (
+                    <p></p>
+                )}
+            </form>
+        ) : (
+            <>
+            <p className='nomPrenom'>Bienvenue, {prenomEleve} {nomEleve}</p>
+            <div className="notes">
+                {notes}
+            </div>
+            <div className='moyenneGenerale'>
+                <strong>Moyenne générale :</strong> {calculerMoyenneGenerale(data)}/20
+            </div>
+            </>
+        )}
         </>
     );
 }

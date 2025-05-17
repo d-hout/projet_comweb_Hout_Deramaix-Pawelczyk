@@ -38,7 +38,7 @@ Notre projet consiste en la réalisation d'une application web garantissant la *
 
 L'application permet une connexion différenciée selon si l'on est un élève 👨‍🎓 ou un professeur 👩‍🏫. Un utilisateur se connecte avec son identifiant et son mot de passe.
 
-Un élève a accès seulement à ses notes 📚 sur les différentes matières. Les enseignants 👨‍🏫 ont accès seulement à leurs notes (celles des cours qu’ils donnent) pour la classe entière 👥 ou pour les groupes sélectionnés et peuvent ajouter ➕ ou modifier ✏️ des séries de notes.
+Un élève a accès seulement à ses notes 📚 sur les différentes matières. Les enseignants 👨‍🏫 ont accès seulement à leurs notes (celles des cours qu’ils donnent) pour la classe entière 👥 ou pour les groupes sélectionnés.
 
 <h2 id="prérequis">Prérequis</h2>
 
@@ -47,10 +47,9 @@ Retrouvez les prérequis à effectuer afin de pouvoir lancer le projet.
 <h3 id="conditions-préalables">Conditions préalables</h3>
 
 Nous avons utilisé **React** qui est un framework JavaScript nécessitant un compilateur JS, nous avons choisi **Node.js** pour cela.
-Nous avons également utilisé **XAMPP** en ce qui concerne la gestion des bases de données pour faire notre API en local.
+Nous avons également utilisé **XAMPP** en ce qui concerne la gestion des bases de données pour faire notre API dans un premier temps en local, avant de basculer vers un hébergement sur le serveur zzz de Bordeaux INP.
 
 * [Installer Node.js](https://nodejs.org/)
-* [Installer XAMPP](https://www.apachefriends.org/)
 
 <h3 id="installation">Installation</h3>
 
@@ -71,9 +70,6 @@ Nous avons également utilisé **XAMPP** en ce qui concerne la gestion des bases
    ```
 
 4. Observer le rendu avec l'adresse **localhost** donnée
-
-5. Pour le moment, l'API est utilisée à l'aide de XAMPP en local. Glisser-déposer le dossier **API** vers **C:/xampp/htdocs**, lancer **Apache** et **MySQL** et aller sur http://localhost/phpmyadmin.
-Dans l'onglet base de données, créer une nouvelle base nommée **not_ensc** puis aller dans l'onglet importer pour importer le fichier **not_ensc.sql**. Puis utiliser l'API avec l'adresse http://localhost/API/eleves.php ou http://localhost/API/professeurs.php
 
 <h2 id="utilisés-dans-ce-projet">Utilisés dans ce projet</h2>
 

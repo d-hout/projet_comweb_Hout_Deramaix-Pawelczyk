@@ -23,11 +23,11 @@ function PageAccueilConnexion() {
             <Bandeau/>
             <Poulpe/>
             <div className="boutonsConnexion">
-                <button className="boutonConnexionEleve" onClick={afficherConnexionEleve}>
+                <button onClick={afficherConnexionEleve}>
                     <img src="/images/eleve.png" alt="Icône représentant un élève"/>
                     <p>Connexion Élève</p>
                 </button>
-                <button className="boutonConnexionProf" onClick={afficherConnexionProf}>
+                <button onClick={afficherConnexionProf}>
                     <img src="/images/professeur.png" alt="Icône représentant un professeur"/>
                     <p>Connexion Professeur</p>
                 </button>

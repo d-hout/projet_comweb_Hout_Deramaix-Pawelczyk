@@ -9,12 +9,10 @@ function PageFormulaireProf() {
     const [prenomProf, setPrenomProf] = useState('');
     const [clicConnexion, setClicConnexion] = useState(false);
     const [erreurConnexion, setErreurConnexion] = useState(false);
+    const [erreurChampsVides, setErreurChampsVides] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
     const [groupesSelectionnes, setGroupesSelectionnes] = useState({ 1: true, 2: true, 3: true, 4: true });
-    const [erreurChamps, setErreurChamps] = useState(false);
-
-
 
     const API = () => {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
@@ -44,7 +42,6 @@ function PageFormulaireProf() {
             })
     };
 
-
     useEffect(() => {
         if (clicConnexion) {
             API();
@@ -52,12 +49,12 @@ function PageFormulaireProf() {
     }, [clicConnexion]);
 
     const afficherNotesProf = (e) => {
-        e.preventDefault();
-        if (identifiant === '' || mdp === '') {
-            setErreurChamps(true);
+        e.preventDefault(); // Empêcher le rechargement de la page
+        if (identifiant.trim() == "" || mdp.trim() == "") {
+            setErreurChampsVides(true);
             setErreurConnexion(false);
         } else {
-            setErreurChamps(false);
+            setErreurChampsVides(false);
             setClicConnexion(true);
         }
     };
@@ -140,42 +137,45 @@ function PageFormulaireProf() {
 
     return (
         <>
-            <Bandeau />
-            <Poulpe />
-            {!clicConnexion ? (
-                <form onSubmit={afficherNotesProf}>
-                    <label>Identifiant</label>
-                    <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
-                    <label>Mot de passe</label>
-                    <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)} />
-                    <button type="submit">Se connecter</button>
-                    {erreurChamps && <p>Veuillez remplir tous les champs.</p>}
-                    {erreurConnexion && <p>Identifiant ou mot de passe incorrect !</p>}
-                </form>
-            ) : (
-                <>
-                    <div className='nomProf'>
-                        <p className='nomProf'>Bienvenue, {nomProf} {prenomProf}</p>
-                    </div>
-                    <div className="groupes">
-                        <label>
-                            <input type="checkbox" checked={groupesSelectionnes[1]} onChange={() => afficherNotesGroupes(1)} /> Groupe 1
-                        </label>
-                        <label>
-                            <input type="checkbox" checked={groupesSelectionnes[2]} onChange={() => afficherNotesGroupes(2)} /> Groupe 2
-                        </label>
-                        <label>
-                            <input type="checkbox" checked={groupesSelectionnes[3]} onChange={() => afficherNotesGroupes(3)} /> Groupe 3
-                        </label>
-                        <label>
-                            <input type="checkbox" checked={groupesSelectionnes[4]} onChange={() => afficherNotesGroupes(4)} /> Groupe 4
-                        </label>
-                    </div>
-                    <div className="notes">
-                        {notes}
-                    </div>
-                </>
-            )}
+        <Bandeau />
+        <Poulpe />
+        {!clicConnexion ? (
+            <form onSubmit={afficherNotesProf}>
+                <label>Identifiant</label>
+                <input type="text" id="identifiant" value={identifiant} onChange={(e) => setIdentifiant(e.target.value)} />
+                <label>Mot de passe</label>
+                <input type="password" id="mdp" value={mdp} onChange={(e) => setMdp(e.target.value)} />
+                <button type="submit">Se connecter</button>
+                {erreurChampsVides ? (
+                    <p>Veuillez remplir tous les champs !</p>
+                ) : erreurConnexion ? (
+                    <p>Identifiant ou mot de passe incorrect !</p>
+                ) : (
+                    <p></p>
+                )}
+            </form>
+        ) : (
+            <>
+            <p className='nomPrenom'>Bienvenue, {prenomProf} {nomProf}</p>
+            <div className="groupes">
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[1]} onChange={() => afficherNotesGroupes(1)} /> Groupe 1
+                </label>
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[2]} onChange={() => afficherNotesGroupes(2)} /> Groupe 2
+                </label>
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[3]} onChange={() => afficherNotesGroupes(3)} /> Groupe 3
+                </label>
+                <label>
+                    <input type="checkbox" checked={groupesSelectionnes[4]} onChange={() => afficherNotesGroupes(4)} /> Groupe 4
+                </label>
+            </div>
+            <div className="notes">
+                {notes}
+            </div>
+            </>
+        )}
         </>
     );
 }
