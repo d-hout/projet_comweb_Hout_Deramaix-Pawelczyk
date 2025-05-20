@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import Bandeau from './Bandeau.jsx';
 import Poulpe from './Poulpe.jsx';
 
-function PageFormulaireEleve() {
+function PageFormulaireEleve() { 
+    //etats
     const [data, setData] = useState([]);
     const [data2, setData2] = useState([]);
     const [nomEleve, setNomEleve] = useState('');
@@ -12,20 +13,24 @@ function PageFormulaireEleve() {
     const [erreurChampsVides, setErreurChampsVides] = useState(false);
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
-
+    
+    // Appels API pour récupérer les données si les identifiants sont corrects
     const API = () => {
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data => {
-                if (data.length == 0) {
+                //verification qu'une saisie a été faite pour l'identifiant
+                if (data.length == 0) { //si champs vides
                     setErreurConnexion(true);
                     setClicConnexion(false);
                 } else {
+                    //si champs remplis
                     setErreurConnexion(false);
                     setData(data);
                 }
             })
 
+        //même chose pour le mots de passe
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/nom_prenom_eleves.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data2 => {
@@ -40,7 +45,8 @@ function PageFormulaireEleve() {
                 }
             })
     };
-
+    
+    // Déclenche l’appel API si le bouton a été cliqué
     useEffect(() => {
         if (clicConnexion) {
             API();
@@ -57,7 +63,8 @@ function PageFormulaireEleve() {
             setClicConnexion(true);
         }
     }
-
+    
+    // Crée les tableaux par matière à partir des données de notes
     const afficherTableaux = (donnees) => {
         const matieres = [];
         const tableaux = [];
@@ -88,6 +95,8 @@ function PageFormulaireEleve() {
                             <td>{donnees[j].commentaire}</td>
                         </tr>
                     );
+
+                    // Calcul moyenne pondérée par matière
                     let coefficient = donnees[j].coefficient;
                     let [note, surCombien] = donnees[j].note.split('/');
                     coefficient = parseFloat(coefficient);
@@ -125,7 +134,8 @@ function PageFormulaireEleve() {
 
         return tableaux;
     };
-
+    
+    // Moyenne générale toutes matières confondues
     const calculerMoyenneGenerale = (donnees) => {
         let sommeNotesPonderees = 0;
         let sommeCoefficients = 0;
@@ -143,7 +153,7 @@ function PageFormulaireEleve() {
         return (sommeNotesPonderees / sommeCoefficients).toFixed(2);
     };
 
-    const notes = afficherTableaux(data);
+    const notes = afficherTableaux(data); // Génère les tableaux
 
     return (
         <>
