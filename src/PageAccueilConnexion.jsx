@@ -7,11 +7,13 @@ import PageFormulaireProf from './PageFormulaireProf.jsx';
 function PageAccueilConnexion() {
     const [connexionEleve, setConnexionEleve] = useState(false);
     const [connexionProf, setConnexionProf] = useState(false);
-  
+
+    // Fonction déclenchée au clic sur le bouton "Élève"
     const afficherConnexionEleve = () => {
         setConnexionEleve(true);
     }
 
+    // Fonction déclenchée au clic sur le bouton "Professeur"
     const afficherConnexionProf = () => {
         setConnexionProf(true);
     }
@@ -22,6 +24,8 @@ function PageAccueilConnexion() {
             <>
             <Bandeau/>
             <Poulpe/>
+            
+            {/* Boutons de connexion */}
             <div className="boutonsConnexion">
                 <button onClick={afficherConnexionEleve}>
                     <img src="/images/eleve.png" alt="Icône représentant un élève"/>
@@ -35,12 +39,15 @@ function PageAccueilConnexion() {
             </>
         );
     }
+
+    // Si l'utilisateur a cliqué sur "Connexion Élève", on affiche le formulaire élève
     else if (connexionEleve==true)
     {
         return (
             <PageFormulaireEleve/>
         )
     }
+    // Sinon, s’il a cliqué sur "Connexion Prof", on affiche le formulaire professeur
     else (connexionProf==true)
     {
         return (
