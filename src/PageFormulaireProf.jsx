@@ -13,8 +13,9 @@ function PageFormulaireProf() {
     const [identifiant, setIdentifiant] = useState('');
     const [mdp, setMdp] = useState('');
     const [groupesSelectionnes, setGroupesSelectionnes] = useState({ 1: true, 2: true, 3: true, 4: true });
-
-    const API = () => {
+    
+    // Fonction pour récupérer les données depuis l'API
+    const API = () => { //verification qu'une saisie a ete faite pour l'identifiant 
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
             .then(data => {
@@ -29,7 +30,7 @@ function PageFormulaireProf() {
 
         fetch(`https://bpawelczyk.zzz.bordeaux-inp.fr/not_ensc/nom_prenom_professeurs.php?nom_utilisateur=${identifiant}&mdp=${mdp}`)
             .then(r => r.json())
-            .then(data2 => {
+            .then(data2 => { // meme chose pour le mot de passe 
                 if (data2.length == 0) {
                     setErreurConnexion(true);
                     setClicConnexion(false);
@@ -42,12 +43,14 @@ function PageFormulaireProf() {
             })
     };
 
+    //declence l'appel API si le bouton a été cliqué 
     useEffect(() => {
         if (clicConnexion) {
             API();
         }
     }, [clicConnexion]);
-
+    
+    // Fonction déclenchée à la soumission du formulaire de connexion
     const afficherNotesProf = (e) => {
         e.preventDefault(); // Empêcher le rechargement de la page
         if (identifiant.trim() == "" || mdp.trim() == "") {
@@ -58,7 +61,8 @@ function PageFormulaireProf() {
             setClicConnexion(true);
         }
     };
-
+    
+    // Gère l'affichage ou non des groupes dans les tableaux
     const afficherNotesGroupes = (numeroGroupe) => {
         const nouvelEtat = { ...groupesSelectionnes };
         nouvelEtat[numeroGroupe] = !groupesSelectionnes[numeroGroupe];
